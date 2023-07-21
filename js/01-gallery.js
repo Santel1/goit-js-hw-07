@@ -36,18 +36,25 @@ function onClickGalleryCard(evt) {
 
   const originalSrc = evt.target.dataset.source;
 
-  instance = basicLightbox.create(`
+  instance = basicLightbox.create(
+    `
     <img src="${originalSrc}" width="800" height="600">
-`);
+`,
+    {
+      onShow: (instance) => {
+        document.addEventListener("keydown", onModalClose);
+      },
+      onClose: (instance) => {
+        document.removeEventListener("keydown", onModalClose);
+      },
+    }
+  );
 
-  document.addEventListener("keydown", onModalClose);
   instance.show();
 }
 
 function onModalClose(evt) {
   if (evt.code === "Escape") {
-    document.removeEventListener("keydown", onModalClose);
-
     instance.close();
   }
 }
